@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <link rel="stylesheet" href="highfashion.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <header>
+        <nav class="navlink">
+            <a href="highfashion.html"><i></i><span>Home</span></a>
+            <a href="new Arrival.html"><i></i><span>Products</span></a>
+            <a href="cart.html" id="cart-link"><i class="fas fa-shopping-cart"></i> <span id="cart-count">0</span></a>
+        </nav>
+    </header>
+
+    <div style="padding: 20px;">
+        <h1>Shopping Cart</h1>
+        <div id="cart-items"></div>
+        <a href="highfashion.html"><button style="padding: 10px; margin: 10px; background-color: blue; color: white; border: none; border-radius: 5px;">Back to Home</button></a>
+    </div>
+
+    <script>
+        function loadCart() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const cartCount = document.getElementById('cart-count');
+            cartCount.textContent = cart.length;
+
+            const cartItems = document.getElementById('cart-items');
+            cartItems.innerHTML = '';
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p>Your cart is empty.</p>';
+                return;
+            }
+            cart.forEach((item, index) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.style.border = '1px solid #ccc';
+                itemDiv.style.padding = '10px';
+                itemDiv.style.margin = '10px 0';
+                itemDiv.innerHTML = `
+                    <img src="${item.img}" alt="${item.name}" width="100px">
+                    <h3>${item.name}</h3>
+                    <p>Price: ${item.price}</p>
+                    <button onclick="removeFromCart(${index})">Remove</button>
+                `;
+                cartItems.appendChild(itemDiv);
+            });
+        }
+
+        function removeFromCart(index) {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart.splice(index, 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            loadCart();
+        }
+
+        window.onload = loadCart;
+    </script>
+</body>
+</html>
